@@ -41,6 +41,17 @@ public class PlayerController : MonoBehaviour{
         movementX = movementVector.x;
         movementY = movementVector.y;
     }
+    public void OnJump(InputValue jumpValue)
+    {
+        Vector3 movement = new Vector3(movementX, 25.0f, movementY);
+        
+        rb.AddForce(movement * speed);
+    }
+
+    public void GotHit()
+    {
+        GameManager.Manager.RestartGame();
+    }
 
     // Update is called once per frame
     void Update()

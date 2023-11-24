@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
+
 
 public class GameManager : MonoBehaviour{
 
@@ -13,6 +15,8 @@ public class GameManager : MonoBehaviour{
     public GameObject winTextObject;
 
     public static GameManager Manager;
+    public List<ZoneManager> Zones;
+    public int currentZone;
 
 
 
@@ -27,7 +31,7 @@ public class GameManager : MonoBehaviour{
     void SetCountText()
     {
         countText.text = "Count: " + count.ToString();
-        if (count >= 10)
+        if (Zones.Count < currentZone+1)
         {
             winTextObject.SetActive(true);
         }
@@ -49,12 +53,21 @@ public class GameManager : MonoBehaviour{
     {
         if (other.gameObject.CompareTag("PickUp"))
         {
+            Zones[currentZone].CollectibleCount -= 1;
             count = count + 1;
             other.gameObject.SetActive(false);
+            if (Zones[currentZone].CollectibleCount== 0){
+                Zones[currentZone].Door.SetActive(false);
+                currentZone++;
+            }
             SetCountText();
         }
     }
 
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(0);
+    }
 
     // Update is called once per frame
     void Update()
